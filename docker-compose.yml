@@ -1,0 +1,27 @@
+#Docker compose is just for local development
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=pg_db_pet_store_dev
+      - POSTGRES_PASSWORD=password
+    env_file:
+      - .env
+
+  backend:
+    depends_on:
+      - postgres
+    build: .
+    ports: #mapping ports from remote docker container to local
+      - 5000:5000
+      - 9229:9229 # for debugging
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:docker
+    env_file:
+      - .env

@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pet {
+  id          String @id @default(uuid())
+  name        String
+  age         Float
+  animal_type String
+  price       Float
+}
+
+model AnimalType {
+  id   String @id @default(uuid())
+  type String
+}
+
+model Product {
+  id           String @id @default(uuid())
+  display_name String
+  product_type String
+  price        Float
+  animal_type  String
+}
+
+model ProductType {
+  id   String @id @default(uuid())
+  type String
+}
+
+model UserProfile {
+  id         String @id @default(uuid())
+  first_name String
+  last_name  String
+  email      String
+}
+
+model UserCredential {
+  id              String @id @default(uuid())
+  profile_id      String
+  username        String
+  hashed_password String
+}

@@ -1,0 +1,14 @@
+{
+  "env": {
+    "target": {
+      "node": 20
+    }
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript"
+    }
+  },
+  "module": { "type": "es6" },
+  "sourceMaps": "inline"
+}
