@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["ES2022"],
     "strict": true,
     "sourceMap": true,
-    "target": "es2017",
+    "target": "ES2022",
     "outDir": "./dist",
     "baseUrl": "./src",
-    "module": "ES6",
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/*.test.ts"],

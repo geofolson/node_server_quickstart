@@ -1,23 +1,38 @@
-#Docker compose is just for local development
+# Docker compose is just for local development
 services:
   postgres:
     container_name: postgres
-    image: postgres:16-alpine
+    image: postgres:17-alpine
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=pg_db_pet_store_dev
+      - POSTGRES_DB=app_db_dev
       - POSTGRES_PASSWORD=password
     env_file:
       - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
+    container_name: backend
     depends_on:
-      - postgres
-    build: .
-    ports: #mapping ports from remote docker container to local
-      - 5000:5000
+      postgres:
+        condition: service_healthy
+    build:
+      context: .
+      target: development
+      cache_from:
+        - node:22-alpine
+    restart: unless-stopped
+    ports:
+      - 3000:3000
       - 9229:9229 # for debugging
     volumes:
       - .:/usr/src/app
@@ -25,3 +40,18 @@ services:
     command: npm run start:docker
     env_file:
       - .env
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:

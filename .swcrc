@@ -1,13 +1,9 @@
 {
-  "env": {
-    "target": {
-      "node": 20
-    }
-  },
   "jsc": {
     "parser": {
       "syntax": "typescript"
-    }
+    },
+    "target": "es2022"
   },
   "module": { "type": "es6" },
   "sourceMaps": "inline"

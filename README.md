@@ -1,49 +1,135 @@
-## To run locally
+# Node.js Server Quickstart Template
 
-`docker compose up`
+A production-ready template for quickly bootstrapping Node.js web server projects with TypeScript, Express, Prisma ORM, PostgreSQL, and Docker.
 
-to refresh prisma client locally after making local schema changes:
-`prisma generate`
+## Features
 
-## Explanations for package.json scripts
+- **TypeScript** - Type-safe development
+- **Express** - Fast, unopinionated web framework
+- **Prisma ORM** - Modern database toolkit for PostgreSQL
+- **Docker Compose** - Containerized development environment
+- **SWC** - Fast TypeScript/JavaScript compiler
+- **Hot Reload** - Automatic server restart on file changes
 
-### "prune:docker"
+## Quick Start
 
-Removes all unused containers, networks, images (both dangling and unused), and optionally, volumes.
+### Prerequisites
 
-### "build":
+- Docker and Docker Compose
+- Node.js 22+ (for local development)
+  - Recommended: Use [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
+  - Install with: `nvm install 22 && nvm use 22`
 
-removes contents of `/dist` directory, compiles contents of `/src` and puts output in `/dist`
+### Running Locally
 
-### "db:console"
+1. Start the development environment:
 
-Opens up a db console for the DB running in docker compose
+```bash
+npm run dev
+# or for a fresh build:
+npm run dev:build
+```
 
-### "db:migrate"
+2. The server will be available at `http://localhost:3000`
 
-Runs prisma migration inside docker compose backend
+3. View logs:
 
-### "db:migrate:undo"
+```bash
+npm run logs
+```
 
-Not implemented yet. Would be for reversing the last migration.
+4. Stop the application:
 
-### "rebuild:be":
+```bash
+npm run down
+```
 
-For use when developing - useful for DB schema changes without stopping entire app.
-Builds backend, stops and removes running backend, starts backend with new build to use latest schema in calls to DB. Leaves DB running. Then you can do your db migration and seeding.
+## Development Workflow
 
-### "seed:dev": "
+### Define Your Database Schema
 
-Runs the DB seed script at `scripts/seed/dev.ts` using `docker compose run backend`
+1. Edit `prisma/schema.prisma` to define your data models
+2. Generate and run migrations:
 
-### "start"
+```bash
+npm run db:migrate
+```
 
-Basic node start of the `index.js`
+3. Refresh Prisma client locally after schema changes:
 
-### "start:docker"
+```bash
+npx prisma generate
+```
 
-Used as the start command in the Dockerfile
+**Note:** This template uses Prisma 7. The database URL is configured via the `datasourceUrl` option in `PrismaClient` (see `src/Persistence/DatabaseClient.ts`), not in the schema file.
 
-### "watch"
+### Create Your Services
 
-Alternative to using vscode configured "task" that runs 'restart backend' on save
+1. Add service classes in `src/Service/`
+2. Add models in `src/Models/`
+3. Define routes in `src/index.ts`
+
+### Build and Deploy
+
+```bash
+npm run build
+npm start
+```
+
+## Available Scripts
+
+### Development
+
+- **`npm run dev`** - Start development environment (Docker Compose)
+- **`npm run dev:build`** - Start development with fresh build
+- **`npm run logs`** - View backend container logs
+- **`npm run down`** - Stop all containers
+- **`npm run watch`** - Watch files and auto-restart backend
+
+### Build & Run Locally
+
+- **`npm run build`** - Compile TypeScript to `/dist` directory
+- **`npm start`** - Run compiled application locally (no Docker)
+- **`npm run start:docker`** - Docker entrypoint (builds and starts with debugging)
+
+### Database
+
+- **`npm run db:console`** - Open PostgreSQL console in running container
+- **`npm run db:migrate`** - Run Prisma migrations
+- **`npm run rebuild:be`** - Rebuild backend only (useful for schema changes)
+
+### Maintenance
+
+- **`npm run prune:docker`** - Remove all unused Docker resources
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── index.ts              # Main application entry point
+│   ├── Models/               # Data models
+│   ├── Service/              # Business logic services
+│   └── Persistence/          # Database client and utilities
+├── prisma/
+│   └── schema.prisma         # Database schema definition
+├── dist/                     # Compiled JavaScript output
+├── docker-compose.yml        # Local development environment
+└── Dockerfile                # Production container image
+```
+
+## Environment Variables
+
+A `.env` file is included in the repository for local development. For production deployments, create a `.env.production` file with your production settings.
+
+## Next Steps
+
+1. Define your database models in `prisma/schema.prisma`
+2. Create migrations with `npm run db:migrate`
+3. Build your services in `src/Service/`
+4. Add your API routes in `src/index.ts`
+5. Build and deploy!
+
+## License
+
+MIT
