@@ -6,7 +6,6 @@ export default class DatabaseClient {
 
   private constructor() {
     this._prisma = new PrismaClient({
-      datasourceUrl: process.env.DATABASE_URL,
       log: ['query', 'info', 'warn', 'error'],
     });
   }

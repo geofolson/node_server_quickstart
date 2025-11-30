@@ -61,7 +61,7 @@ npm run db:migrate
 npx prisma generate
 ```
 
-**Note:** This template uses Prisma 7. The database URL is configured via the `datasourceUrl` option in `PrismaClient` (see `src/Persistence/DatabaseClient.ts`), not in the schema file.
+**Note:** This template uses Prisma 7. The database URL is configured in `prisma/prisma.config.ts` using the `env()` helper. You'll need to install the `dotenv` package (`npm install dotenv`) for environment variable loading.
 
 ### Create Your Services
 
@@ -112,7 +112,8 @@ npm start
 │   ├── Service/              # Business logic services
 │   └── Persistence/          # Database client and utilities
 ├── prisma/
-│   └── schema.prisma         # Database schema definition
+│   ├── schema.prisma         # Database schema definition
+│   └── prisma.config.ts      # Prisma 7 configuration (database URL, migrations)
 ├── dist/                     # Compiled JavaScript output
 ├── docker-compose.yml        # Local development environment
 └── Dockerfile                # Production container image
@@ -122,13 +123,22 @@ npm start
 
 A `.env` file is included in the repository for local development. For production deployments, create a `.env.production` file with your production settings.
 
+**Important for Prisma 7:** This template uses `prisma.config.ts` which requires the `dotenv` package to load environment variables. Install it with:
+
+```bash
+npm install dotenv
+```
+
+The `prisma.config.ts` file imports `dotenv/config` at the top to automatically load variables from your `.env` file.
+
 ## Next Steps
 
-1. Define your database models in `prisma/schema.prisma`
-2. Create migrations with `npm run db:migrate`
-3. Build your services in `src/Service/`
-4. Add your API routes in `src/index.ts`
-5. Build and deploy!
+1. Install the `dotenv` package: `npm install dotenv`
+2. Define your database models in `prisma/schema.prisma`
+3. Create migrations with `npm run db:migrate`
+4. Build your services in `src/Service/`
+5. Add your API routes in `src/index.ts`
+6. Build and deploy!
 
 ## License
 
